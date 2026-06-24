@@ -160,7 +160,7 @@ export default function Home() {
 
   // Gemini API Request Wrapper
   const callGeminiAPI = async (key, symbol, compName) => {
-    const model = "gemini-1.5-pro";
+    const model = "gemini-1.5-pro-latest";
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
 
     const promptText = `미국 주식 ${compName} (티커: ${symbol})에 대해 분석해줘.
