@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI Stock Intelligence Dashboard - 사용 가이드
 
-## Getting Started
+이 문서에는 보안 전용 부계정을 생성하여 안전하게 무료 Gemini API Key를 발급받는 방법과 사이트 적용법이 단계별로 상세히 기술되어 있습니다.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🔑 1단계: 보안용 구글 부계정 생성하기 (권장)
+개인정보 유출 위험을 원천 차단하기 위해, 이 주식 앱 전용으로 사용할 구글 계정을 새로 생성하는 것을 적극 권장합니다.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. 인터넷 브라우저에서 **[구글 계정 만들기](https://accounts.google.com/signup)** 페이지로 접속합니다.
+2. 성명과 생년월일을 적고 **[다음]**을 누릅니다.
+3. 원하는 새로운 Gmail 주소를 직접 입력하여 생성합니다.
+4. 안전한 비밀번호를 설정한 후 회원가입을 완료합니다.
+   - *팁: 이 계정에는 신용카드 등 어떠한 개인 금융 정보도 등록하지 말고 빈 계정 상태로 놔두세요.*
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ 2단계: 무료 Gemini API Key 발급받기 (1분 소요)
 
-## Learn More
+1. 새로 만든 구글 계정으로 로그인한 상태에서 **[Google AI Studio](https://aistudio.google.com/)**에 접속합니다.
+2. 화면 우측 상단이나 중앙에 있는 파란색 **[Get API key]** (API 키 가져오기) 버튼을 클릭합니다.
+3. 약관 동의 확인창이 뜨면 동의 체크박스를 체크한 후 동의를 완료합니다.
+4. 화면 상단의 **[Create API key]** (API 키 생성) 파란색 버튼을 누릅니다.
+5. 팝업이 뜨면 **[Create API key in new project]** (새 프로젝트에서 API 키 생성)를 클릭합니다.
+6. 잠시 기다리면 `AIzaSy...`로 시작하는 긴 키가 화면에 표시됩니다.
+7. 키 옆의 **[Copy]** (복사) 버튼을 클릭하여 컴퓨터 메모장 등에 잠시 복사(`Ctrl + V`)해 둡니다.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 3단계: 대시보드 사이트에 적용하기
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+두 가지 적용 방식 중 하나를 선택해 진행하시면 됩니다.
 
-## Deploy on Vercel
+### 방식 A. 화면에 직접 입력하기 (추천)
+1. 브라우저를 열고 배포 주소인 **`https://ai-ar5y.vercel.app/`**에 접속합니다.
+2. 우측 상단의 **'Gemini API Key 입력'**이라고 쓰인 하얀색 입력칸에 복사해 둔 API 키를 붙여넣습니다.
+3. 바로 옆의 **[저장]** 버튼을 클릭합니다.
+4. 버튼이 **`저장됨` (녹색)**으로 변경되면 완료입니다. 이제 원하는 종목(예: TSLA)을 검색하면 실시간 수집 및 한국 ETF 추천 리포트가 정상적으로 자동 생성됩니다.
+5. *참고: 브라우저가 이 키를 기억하므로 매일 다시 입력하실 필요가 없습니다.*
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 방식 B. 내 컴퓨터 로컬에서만 자동 로그인해두기
+1. 프로젝트 폴더의 **[.env.local](file:///c:/Users/kim25/Desktop/영어/.env.local)** 파일을 편집기로 엽니다.
+2. `NEXT_PUBLIC_GEMINI_API_KEY=` 우측에 복사한 실제 API 키를 입력하고 저장합니다.
+   - *예시: `NEXT_PUBLIC_GEMINI_API_KEY=AIzaSyA123bc456...`*
+3. 저장 후 로컬 서버 `npm run dev`를 작동시켜 `http://localhost:3000`에 접속하면, 화면 입력 없이 바로 실시간 분석이 돌아갑니다.
