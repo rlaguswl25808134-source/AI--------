@@ -52,4 +52,12 @@ To deploy this project to Vercel for free:
    ```
 2. Push the code to a public or private GitHub/GitLab/Bitbucket repository.
 3. Log in to [Vercel](https://vercel.com/) and click **Add New Project**.
-4. Import the Git repository and click **Deploy**. Vercel will automatically configure, build, and deploy the Next.js project.
+4. Import the Git repository.
+5. **Configure Environment Variables**:
+   - Under the Vercel project settings (during setup, or under **Settings -> Environment Variables** after initial deploy):
+   - Add the following environment variable:
+     - **Key**: `NEXT_PUBLIC_GEMINI_API_KEY`
+     - **Value**: [Your Free Gemini API Key]
+     - Click **Add**.
+6. Click **Deploy**. Vercel will automatically build and publish the Next.js application with your fallback key configured.
+7. *(Note)* If you update this key in Vercel settings later, you must trigger a **Redeploy** from the Vercel deployments tab for the static compilation to pull the updated variable.
