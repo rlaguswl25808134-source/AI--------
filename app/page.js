@@ -140,6 +140,18 @@ export default function Home() {
             </p>
           </div>
         `);
+      } else if (err.message === "SERVER_OVERLOADED" || err.message.includes("high demand")) {
+        setReportHtml(`
+          <div class="bg-orange-500/10 border border-orange-500/20 rounded-xl p-5 text-slate-100">
+            <h3 class="text-orange-400 font-bold text-sm mb-2">⚠️ 서버 일시적 과부하 (High Demand)</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-1.5">
+              현재 Google Gemini AI 서버에 전 세계적인 요청이 폭주하여 처리가 일시적으로 지연되고 있습니다.
+            </p>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              <strong>잠시 후 다시</strong> 시도해 주세요. 스파이크성 과부하는 보통 일시적인 현상입니다.
+            </p>
+          </div>
+        `);
       } else {
         alert(`분석 중 오류가 발생했습니다: ${err.message || "API 통신 실패"}`);
       }
@@ -148,7 +160,7 @@ export default function Home() {
 
   // Gemini API Request Wrapper
   const callGeminiAPI = async (key, symbol, compName) => {
-    const model = "gemini-2.5-flash";
+    const model = "gemini-1.5-flash";
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
 
     const promptText = `미국 주식 ${compName} (티커: ${symbol})에 대해 분석해줘.
@@ -229,6 +241,9 @@ export default function Home() {
     if (!response.ok) {
       if (response.status === 429) {
         throw new Error("RATE_LIMIT_EXCEEDED");
+      }
+      if (response.status === 503) {
+        throw new Error("SERVER_OVERLOADED");
       }
       const errJson = await response.json().catch(() => ({}));
       const errMsg = errJson.error?.message || `HTTP error! status: ${response.status}`;
