@@ -102,7 +102,7 @@ export default function Home() {
 
   // Execute Analysis with Google Search Grounding
   const startAnalysis = async () => {
-    const activeKey = localStorage.getItem("gemini_api_key") || apiKey;
+    const activeKey = localStorage.getItem("gemini_api_key") || apiKey || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
     if (!activeKey) {
       alert("분석을 시작하려면 먼저 상단 우측에 Gemini API 키를 저장해 주세요. (Google AI Studio에서 무료 발급 가능)");
       return;
