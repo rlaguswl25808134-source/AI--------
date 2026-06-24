@@ -161,7 +161,7 @@ export default function Home() {
   // Gemini API Request Wrapper
   const callGeminiAPI = async (key, symbol, compName) => {
     const model = "gemini-1.5-flash";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+    const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${key}`;
 
     const promptText = `미국 주식 ${compName} (티커: ${symbol})에 대해 분석해줘.
 너는 구글 검색 도구(googleSearch)를 활성화하여 반드시 다음 정보들을 영어와 한국어 사이트에서 실시간 검색 및 수집한 후 분석해야 해.
