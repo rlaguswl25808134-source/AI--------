@@ -160,7 +160,7 @@ export default function Home() {
 
   // Gemini API Request Wrapper
   const callGeminiAPI = async (key, symbol, compName) => {
-    const model = "gemini-1.5-flash";
+    const model = "gemini-3.1-flash-lite";
     const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${key}`;
 
     const promptText = `미국 주식 ${compName} (티커: ${symbol})에 대해 분석해줘.
@@ -205,7 +205,10 @@ export default function Home() {
 - 어떤 지표나 뉴스가 다음 변곡점이 될지 주목해야 할 모니터링 포인트 서술.
 ---
 
-반드시 신뢰할 수 있고 구체적인 데이터에 기반해야 하며 실시간 인터넷 검색 결과를 요약 반영해줘.`;
+반드시 신뢰할 수 있고 구체적인 데이터에 기반해야 하며 실시간 인터넷 검색 결과를 요약 반영해줘.
+
+**[전문가 역할 부여]**
+너는 미국 금융 투자 및 주식 시장 분석 전문가야. 객관적이고 사실에 기반하여 전문적인 보고서를 작성해줘. 모든 추천 ETF 정보에는 실질 수수료(총보수율)와 원본 정보 출처 웹링크를 꼭 명시해줘. 투자 주의사항을 반드시 마지막에 덧붙여줘.`;
 
     const requestPayload = {
       contents: [
@@ -214,11 +217,6 @@ export default function Home() {
           parts: [{ text: promptText }]
         }
       ],
-      systemInstruction: {
-        parts: [
-          { text: "너는 미국 금융 투자 및 주식 시장 분석 전문가야. 객관적이고 사실에 기반하여 전문적인 보고서를 작성해줘. 모든 추천 ETF 정보에는 실질 수수료(총보수율)와 원본 정보 출처 웹링크를 꼭 명시해줘. 투자 주의사항을 반드시 마지막에 덧붙여줘." }
-        ]
-      },
       generationConfig: {
         temperature: 0.2,
         topP: 0.95
@@ -234,13 +232,25 @@ export default function Home() {
     });
 
     if (!response.ok) {
+      const errJson = await response.json().catch(() => ({}));
+      if (response.status === 404) {
+        let availableModels = 'None';
+        try {
+          const listUrl = `https://generativelanguage.googleapis.com/v1/models?key=${key}`;
+          const listRes = await fetch(listUrl);
+          const listData = await listRes.json();
+          availableModels = listData.models ? listData.models.map(m => m.name.replace('models/', '')).filter(m => m.includes('gemini')).join(', ') : 'None';
+        } catch (e) {
+          availableModels = 'Fetch failed';
+        }
+        throw new Error(`해당 API 키로 접근 가능한 모델 목록: [ ${availableModels} ]. (에러 원본: ${errJson.error?.message})`);
+      }
       if (response.status === 429) {
         throw new Error("RATE_LIMIT_EXCEEDED");
       }
       if (response.status === 503) {
         throw new Error("SERVER_OVERLOADED");
       }
-      const errJson = await response.json().catch(() => ({}));
       const errMsg = errJson.error?.message || `HTTP error! status: ${response.status}`;
       throw new Error(errMsg);
     }
